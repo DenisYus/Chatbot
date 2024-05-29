@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BotConfig {
     @Value("${vk.api.token}")
-    private  String apiToken;
+    private String apiToken;
     @Value("${vk.confirmation.code}")
     private String confirmationCode;
     @Value("${vk.api.version}")

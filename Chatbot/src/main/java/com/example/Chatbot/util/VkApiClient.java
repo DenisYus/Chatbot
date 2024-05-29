@@ -14,20 +14,19 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 public class VkApiClient {
     private static final Logger logger = LoggerFactory.getLogger(VkService.class);
     private final BotConfig botConfig;
+
     @Autowired
     public VkApiClient(BotConfig botConfig) {
         this.botConfig = botConfig;
     }
 
     private final RestTemplate restTemplate = new RestTemplate();
-    public void  sendMessage(int peerId, String message){
+
+    public void sendMessage(int peerId, String message) {
         String url = "https://api.vk.com/method/messages.send";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -39,10 +38,9 @@ public class VkApiClient {
         params.add("access_token", botConfig.getApiToken());
         params.add("v", botConfig.getApiVersion());
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params,headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
         String responseBody = response.getBody();
         logger.info("Response from Vk: {}", responseBody);
     }
-
 }

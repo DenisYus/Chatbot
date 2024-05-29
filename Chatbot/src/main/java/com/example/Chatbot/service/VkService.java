@@ -3,41 +3,54 @@ package com.example.Chatbot.service;
 import com.example.Chatbot.config.BotConfig;
 import com.example.Chatbot.model.Message;
 import com.example.Chatbot.model.VkRequest;
+import com.example.Chatbot.model.VkRequestType;
 import com.example.Chatbot.util.VkApiClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.LinkedHashMap;
 
+
 @Service
+@RequiredArgsConstructor
 public class VkService {
+    @Value("${response.template}")
+    private String responseTemplate;
     private static final Logger logger = LoggerFactory.getLogger(VkService.class);
     private final VkApiClient vkApiClient;
     private final ObjectMapper objectMapper;
     private final BotConfig botConfig;
-    @Autowired
-    public VkService(VkApiClient vkApiClient, ObjectMapper objectMapper, BotConfig botConfig) {
-        this.vkApiClient = vkApiClient;
-        this.objectMapper = objectMapper;
-        this.botConfig = botConfig;
-    }
-    public String handleRequest(VkRequest request){
-        logger.info("request: {}", request);
-        logger.info("API token: {}", botConfig.getApiToken());
-        if ("confirmation".equals(request.getType())){
-            return botConfig.getConfirmationCode();
-        } else if ("message_new".equals(request.getType())) {
-            logger.info("New message");
-            LinkedHashMap<String, Object> object = (LinkedHashMap<String, Object>) request.getObject();
-            Message message = objectMapper.convertValue(object.get("message"), Message.class) ;
-            String responseText = "Вы сказали:" + message.getText();
-            logger.info("Sending response: {}", responseText);
-            vkApiClient.sendMessage(message.getPeer_id(), responseText);
-            return "ok";
+
+    public ResponseEntity<?> handleRequest(VkRequest request) {
+        VkRequestType requestType = request.getType();
+        switch (requestType) {
+            case CONFIRMATION -> {
+                return ResponseEntity.ok(botConfig.getConfirmationCode());
+            }
+            case MESSAGE_NEW -> {
+                return handleMessageNew(request);
+            }
+            default -> throw new IllegalArgumentException("Bad request type" + requestType);
         }
-        return "ok";
+    }
+
+
+    public ResponseEntity<?> handleMessageNew(VkRequest request) {
+
+        final String STATUS_OK = "ok";
+        final String GET_MESSAGE = "message";
+        logger.info("request: {}", request);
+        logger.info("New message");
+        var requestObject = (LinkedHashMap<String, Object>) request.getObject();
+        Message message = objectMapper.convertValue(requestObject.get(GET_MESSAGE), Message.class);
+        String responseText = String.format(responseTemplate, message.getText());
+        logger.info("Sending response: {}", responseText);
+        vkApiClient.sendMessage(message.getPeerId(), responseText);
+        return ResponseEntity.ok(STATUS_OK);
+
     }
 }

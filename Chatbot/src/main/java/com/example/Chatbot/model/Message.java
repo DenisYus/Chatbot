@@ -1,13 +1,15 @@
 package com.example.Chatbot.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
-@Getter
-@Setter
+
+@Data
 public class Message {
-    private  String text;
-    private int from_id;
+    private String text;
+    @JsonProperty("from_id")
+    private int fromId;
     private int id;
-    private int peer_id;
+    @JsonProperty("peer_id")
+    private int peerId;
 }

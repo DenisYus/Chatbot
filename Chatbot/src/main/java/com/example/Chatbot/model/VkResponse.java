@@ -1,16 +1,11 @@
 package com.example.Chatbot.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Setter
-@Getter
+
+@Data
+@AllArgsConstructor
 public class VkResponse {
-
     private String response;
-    public  VkResponse (String response){
-        this.response = response;
-    }
-
-
 }

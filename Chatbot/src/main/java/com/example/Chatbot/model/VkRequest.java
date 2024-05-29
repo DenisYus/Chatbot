@@ -1,13 +1,14 @@
 package com.example.Chatbot.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
-@Setter
-@Getter
+
+@Data
 public class VkRequest {
-    private String type;
+    private VkRequestType type;
     private Object object;
-    private String group_id;
+    @JsonProperty("group_id")
+    private String groupId;
     private String secret;
 }
