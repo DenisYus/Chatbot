@@ -1,7 +1,7 @@
 package com.example.Chatbot.service;
 
 import com.example.Chatbot.config.BotConfig;
-import com.example.Chatbot.exception.BadRequestType;
+import com.example.Chatbot.exception.BadRequestTypeException;
 import com.example.Chatbot.model.Message;
 import com.example.Chatbot.model.VkRequest;
 import com.example.Chatbot.model.VkRequestType;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.LinkedHashMap;
 
@@ -35,7 +34,7 @@ public class VkService {
             case MESSAGE_NEW -> {
                 return handleMessageNew(request);
             }
-            default -> throw new BadRequestType(String.format("Bad request type: %s", requestType));
+            default -> throw new BadRequestTypeException(String.format("Bad request type: %s", requestType));
         }
     }
 

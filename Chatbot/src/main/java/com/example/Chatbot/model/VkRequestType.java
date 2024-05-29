@@ -1,6 +1,6 @@
 package com.example.Chatbot.model;
 
-import com.example.Chatbot.exception.BadRequestType;
+import com.example.Chatbot.exception.BadRequestTypeException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
@@ -26,6 +26,6 @@ public enum VkRequestType {
                 return requestType;
             }
         }
-        throw new BadRequestType(String.format("Bad request type: %s", type));
+        throw new BadRequestTypeException(String.format("Bad request type: %s", type));
     }
 }

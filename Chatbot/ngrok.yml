@@ -1,5 +1,5 @@
 version: "2"
-authtoken: 2h6Fz8dN1DrXxplcBqM4TQ2moye_69mpkH38U5t6tm1DwT462
+authtoken:
 tunnels:
   springboot:
     proto: http
