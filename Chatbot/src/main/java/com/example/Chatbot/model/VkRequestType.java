@@ -1,11 +1,14 @@
 package com.example.Chatbot.model;
 
+import com.example.Chatbot.exception.BadRequestType;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum VkRequestType {
     CONFIRMATION("confirmation"),
     MESSAGE_NEW("message_new");
@@ -23,6 +26,6 @@ public enum VkRequestType {
                 return requestType;
             }
         }
-        throw new IllegalArgumentException("Bad request type" + type);
+        throw new BadRequestType(String.format("Bad request type: %s", type));
     }
 }

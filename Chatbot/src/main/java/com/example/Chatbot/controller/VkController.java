@@ -16,7 +16,8 @@ public class VkController {
     private final VkService vkService;
 
     @PostMapping
-    private ResponseEntity<?> receiveEvent(@RequestBody VkRequest request) {
-        return vkService.handleRequest(request);
+    private ResponseEntity<String> receiveEvent(@RequestBody VkRequest request) {
+
+        return ResponseEntity.ok(vkService.handleRequest(request));
     }
 }
